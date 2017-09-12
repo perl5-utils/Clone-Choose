@@ -2,8 +2,7 @@ package Clone::Choose;
 
 use strict;
 use warnings;
-
-use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
+use Carp ();
 
 =head1 NAME
 
@@ -11,48 +10,93 @@ Clone::Choose - Choose appropriate clone utility
 
 =cut
 
-$VERSION = '0.001';
+our $VERSION = "0.001";
 
-my @BACKENDS = (
+our @BACKENDS = (
     Clone       => "clone",
     Storable    => "dclone",
     "Clone::PP" => "clone",
 );
 
+my $use_m;
+
 BEGIN
 {
-    eval "use Module::Runtime (); 1;" and Module::Runtime->import("use_module");    ## no critic
-    __PACKAGE__->can("use_module") or *use_module = sub {
-        my $pkg = shift;
-        eval "use $pkg";                                                            ## no critic
-        $@ and die $@;                                                              ## no critic
-        1;
-    };
+    unless ($use_m)
+    {
+        eval "use Module::Runtime (); 1;" and $use_m = Module::Runtime->can("use_module");
+        $use_m ||= sub {
+            my $pkg = shift;
+            eval "use $pkg";
+            $@ and die $@;
+            1;
+        };
+    }
+}
+
+sub can
+{
+    my $self     = shift;
+    my $name     = shift;
+    my @backends = @BACKENDS;
+
+    return __PACKAGE__->SUPER::can($name) unless $name eq "clone";
+
+    my $fn;
+    while (my ($pkg, $rout) = splice @backends, 0, 2)
+    {
+        eval { $use_m->($pkg); 1; } or next;
+
+        $fn = $pkg->can($rout);
+        $fn or next;
+
+        last;
+    }
+
+    return $fn;
 }
 
 sub import
 {
-    my $me       = shift;
-    my $tgt      = caller(1);
-    my @backends = @BACKENDS;
+    my ($me, @params) = @_;
+    my $tgt = caller(1);
 
-    # TODO fetch version/tags/function-names ...
+    my @B = @BACKENDS;
+    local @BACKENDS = @B;
 
-    # assume ('clone') - more details later ...
-    while (my ($pkg, $rout) = splice @backends, 0, 2)
+    push @params, "clone" unless grep { /^clone$/ } @params;
+
+    while (my $param = shift @params)
     {
-        eval { use_module($pkg); 1; } or next;
+        if ($param =~ m/^\d/)
+        {
+            # TODO check version
+        }
+        elsif ($param =~ m/^:(.*)$/)
+        {
+            my $favourite = $1;
+            my %b         = @BACKENDS;
+            Carp::croak "$favourite not found" unless $b{$favourite};
+            @BACKENDS = ($favourite => $b{$favourite});
+        }
+        elsif ($param eq "clone")
+        {
+            my $fn = __PACKAGE__->can("clone");
+            $fn or return;
 
-        my $fn = $pkg->can($rout);
-        $fn or next;
+            no strict "refs";
+            *{"$tgt\::clone"} = $fn;
 
-        no strict 'refs';
-        *{"$tgt\::clone"} = $fn;
-        last;
+            @params and Carp::croak "Parameters left after clone. Please see description.";
+
+            return;
+        }
+        else
+        {
+            Carp::croak "$param is not exportable by " . __PACKAGE__;
+        }
     }
 }
-
-# TODO cleanup namespace (use_module)
 
 =head1 SYNOPSIS
 

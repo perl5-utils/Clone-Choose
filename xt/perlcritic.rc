@@ -8,14 +8,12 @@ allow-unsafe    = 1
 
 [TestingAndDebugging::ProhibitNoStrict]
 allow = refs
-[Variables::RequireLocalizedPunctuationVars]
-allow = @ARGV
 [-Miscellanea::ProhibitUnrestrictedNoCritic]
-[Variables::ProhibitPackageVars]
-add_packages = Text::WrapI18N
 [-Subroutines::ProhibitBuiltinHomonyms]
-[Subroutines::ProhibitUnusedPrivateSubroutines]
-allow=_options_sub_commands
 [ControlStructures::ProhibitCascadingIfElse]
 max_elsif = 10
 [-Subroutines::RequireFinalReturn]
+[-RegularExpressions::RequireExtendedFormatting]
+[-ErrorHandling::RequireCarping]
+[-BuiltinFunctions::ProhibitStringyEval]
+[-ErrorHandling::RequireCheckingReturnValueOfEval]
