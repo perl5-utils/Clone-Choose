@@ -1,11 +1,11 @@
-#!perl
+#!perl -T
 
 use strict;
 use warnings;
 
 use Test::More;
 
-use Clone::Choose ':ALL';
+use Clone::Choose;
 
 my %src = (
     simple => "yeah",
