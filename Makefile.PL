@@ -45,6 +45,8 @@ WriteMakefile1(
                     'Test::Pod::Coverage'                 => 0,
                     'Test::Pod::Spelling::CommonMistakes' => 0,
                     'Test::Spelling'                      => 0,
+                    'Test::Perl::Critic'                  => 0,
+                    'Test::PerlTidy'                      => 0,
                 },
             },
             configure => {
