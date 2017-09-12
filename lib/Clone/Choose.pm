@@ -5,8 +5,6 @@ use warnings;
 
 use vars qw($VERSION @ISA @EXPORT @EXPORT_OK %EXPORT_TAGS);
 
-use Module::Runtime ();
-
 =head1 NAME
 
 Clone::Choose - Choose appropriate clone utility
@@ -18,8 +16,19 @@ $VERSION = '0.001';
 my @BACKENDS = (
     Clone       => "clone",
     Storable    => "dclone",
-    "Clone::PP" => "clone"
+    "Clone::PP" => "clone",
 );
+
+BEGIN
+{
+    eval "use Module::Runtime (); 1;" and Module::Runtime->import("use_module");    ## no critic
+    __PACKAGE__->can("use_module") or *use_module = sub {
+        my $pkg = shift;
+        eval "use $pkg";                                                            ## no critic
+        $@ and die $@;                                                              ## no critic
+        1;
+    };
+}
 
 sub import
 {
@@ -27,13 +36,12 @@ sub import
     my $tgt      = caller(1);
     my @backends = @BACKENDS;
 
-    # fetch version/tags/function-names ...
+    # TODO fetch version/tags/function-names ...
 
     # assume ('clone') - more details later ...
     while (my ($pkg, $rout) = splice @backends, 0, 2)
     {
-        eval { Module::Runtime::use_module($pkg); 1; } or next;
-        $@ and next;
+        eval { use_module($pkg); 1; } or next;
 
         my $fn = $pkg->can($rout);
         $fn or next;
@@ -43,6 +51,8 @@ sub import
         last;
     }
 }
+
+# TODO cleanup namespace (use_module)
 
 =head1 SYNOPSIS
 
