@@ -5,9 +5,8 @@ use 5.008001;
 
 use ExtUtils::MakeMaker;
 
-my %RUN_DEPS = (
-    'Module::Runtime' => 0,
-);
+my %RUN_DEPS = ();
+
 my %CONFIGURE_DEPS = (
     'ExtUtils::MakeMaker' => 0,
 );
@@ -58,6 +57,9 @@ WriteMakefile1(
                 requires => {
                     %RUN_DEPS,
                     perl => '5.8.1',
+                },
+                recommends => {
+                    'Module::Runtime' => 0,
                 },
             },
         },
