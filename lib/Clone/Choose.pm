@@ -11,6 +11,7 @@ Clone::Choose - Choose appropriate clone utility
 =cut
 
 our $VERSION = "0.001";
+$VERSION = eval $VERSION;
 
 our @BACKENDS = (
     Clone       => "clone",
