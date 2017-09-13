@@ -71,7 +71,7 @@ sub import
     {
         if ($param =~ m/^\d/)
         {
-            # TODO check version
+            Carp::croak "Clone::Choose version $param required. This is only version $VERSION" if $VERSION < $param;
         }
         elsif ($param =~ m/^:(.*)$/)
         {
