@@ -4,16 +4,34 @@ Clone::Choose - Choose appropriate clone utility
 
 # SYNOPSIS
 
+    use Clone::Choose;
+
+    my $data = {
+        value => 42,
+        href  => {
+            set   => [ 'foo', 'bar' ],
+            value => 'baz',
+        },
+    };
+
+    my $cloned_data = clone $data;
+
+    # it's also possible to use Clone::Choose and pass a clone preference
+    use Clone::Choose qw(:Storable);
+
 # DESCRIPTION
+
+`Clone::Choose` checks several different moudules which provides a
+`clone()` function and selects an appropriate one.
 
 # EXPORTS
 
-## clone
+`Clone::Choose` exports `clone()` by default.
 
 # AUTHOR
 
-Jens Rehsack, `<rehsack at cpan.org>`
-Stefan Hermes, `<hermes at cpan.org>`
+    Jens Rehsack <rehsack at cpan dot org>
+    Stefan Hermes <hermes at cpan dot org>
 
 # BUGS
 
@@ -47,12 +65,10 @@ You can also look for information at:
 
     [http://search.cpan.org/dist/Clone-Choose/](http://search.cpan.org/dist/Clone-Choose/)
 
-# ACKNOWLEDGEMENTS
-
 # LICENSE AND COPYRIGHT
 
-Copyright 2017 Jens Rehsack
-Copyright 2017 Stefan Hermes
+    Copyright 2017 Jens Rehsack
+    Copyright 2017 Stefan Hermes
 
 This program is free software; you can redistribute it and/or modify it
 under the terms of either: the GNU General Public License as published

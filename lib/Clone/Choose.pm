@@ -4,12 +4,6 @@ use strict;
 use warnings;
 use Carp ();
 
-=head1 NAME
-
-Clone::Choose - Choose appropriate clone utility
-
-=cut
-
 our $VERSION = "0.001";
 $VERSION = eval $VERSION;
 
@@ -99,20 +93,44 @@ sub import
     }
 }
 
+1;
+
+__END__
+
+=head1 NAME
+
+Clone::Choose - Choose appropriate clone utility
+
 =head1 SYNOPSIS
+
+  use Clone::Choose;
+
+  my $data = {
+      value => 42,
+      href  => {
+          set   => [ 'foo', 'bar' ],
+          value => 'baz',
+      },
+  };
+
+  my $cloned_data = clone $data;
+
+  # it's also possible to use Clone::Choose and pass a clone preference
+  use Clone::Choose qw(:Storable);
 
 =head1 DESCRIPTION
 
+C<Clone::Choose> checks several different moudules which provides a
+C<clone()> function and selects an appropriate one.
+
 =head1 EXPORTS
 
-=head2 clone
-
-=cut
+C<Clone::Choose> exports C<clone()> by default.
 
 =head1 AUTHOR
 
-Jens Rehsack, C<< <rehsack at cpan.org> >>
-Stefan Hermes, C<< <hermes at cpan.org> >>
+  Jens Rehsack <rehsack at cpan dot org>
+  Stefan Hermes <hermes at cpan dot org>
 
 =head1 BUGS
 
@@ -150,12 +168,10 @@ L<http://search.cpan.org/dist/Clone-Choose/>
 
 =back
 
-=head1 ACKNOWLEDGEMENTS
-
 =head1 LICENSE AND COPYRIGHT
 
-Copyright 2017 Jens Rehsack
-Copyright 2017 Stefan Hermes
+  Copyright 2017 Jens Rehsack
+  Copyright 2017 Stefan Hermes
 
 This program is free software; you can redistribute it and/or modify it
 under the terms of either: the GNU General Public License as published
@@ -168,5 +184,3 @@ See http://dev.perl.org/licenses/ for more information.
 L<Clone>, L<Clone::PP>, L<Storable>
 
 =cut
-
-1;
