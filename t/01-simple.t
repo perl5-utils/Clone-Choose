@@ -15,4 +15,4 @@ my %src = (
 my $tgt = clone(\%src);
 is_deeply(\%src, $tgt);
 
-done_testing();
+done_testing;
