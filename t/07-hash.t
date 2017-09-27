@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 use Scalar::Util qw(refaddr);
-use Test::More tests => 13;
+use Test::More;
 
 use Clone::Choose;
 
@@ -38,3 +38,5 @@ my $empty_hash        = {};
 my $cloned_empty_hash = clone $empty_hash;
 
 ok(refaddr $empty_hash != refaddr $cloned_empty_hash, "Empty hash clone");
+
+done_testing;

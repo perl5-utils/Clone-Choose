@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 use Scalar::Util qw(refaddr);
-use Test::More tests => 13;
+use Test::More;
 
 use Clone::Choose;
 
@@ -29,3 +29,5 @@ my $empty_array        = [];
 my $cloned_empty_array = clone $empty_array;
 
 ok(refaddr $empty_array != refaddr $cloned_empty_array, "Empty array clone");
+
+done_testing;

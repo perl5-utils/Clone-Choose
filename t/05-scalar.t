@@ -3,7 +3,7 @@
 use strict;
 use warnings;
 use Scalar::Util qw(refaddr);
-use Test::More tests => 3;
+use Test::More;
 
 use Clone::Choose;
 
@@ -24,3 +24,5 @@ $undef = \$undef;
 my $cloned_undef = clone $undef;
 
 ok(refaddr $undef != refaddr $cloned_undef, "Scalar Undef");
+
+done_testing;
