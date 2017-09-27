@@ -21,12 +21,52 @@ Clone::Choose - Choose appropriate clone utility
 
 # DESCRIPTION
 
-`Clone::Choose` checks several different moudules which provides a
-`clone()` function and selects an appropriate one.
+`Clone::Choose` checks several different modules which provides a
+`clone()` function and selects an appropriate one. The default preferrence
+is
+
+    Clone
+    Storable
+    Clone::PP
+
+This list might evolve in future. Please see ["EXPORTS"](#exports) how to pick a
+particular one.
 
 # EXPORTS
 
 `Clone::Choose` exports `clone()` by default.
+
+One can explicitly import `clone` by using
+
+    use Clone::Choose qw(clone);
+
+or pick a particular `clone` implementation
+
+    use Clone::Choose qw(:Storable clone);
+
+The exported implementation is resolved dynamically, which means that any
+using module can either rely on the default backend preferrence or choose
+a particular one.
+
+This also means, an already chosen import can't be modified like
+
+    use Clone::Choose qw(clone :Storable);
+
+When one seriously needs different clone implementations, our _recommended_
+way to use them would be:
+
+    use Clone::Choose (); # do not import
+    my ($xs_clone, $st_clone);
+    { local @Clone::Choose::BACKENDS = (Clone => "clone"); $xs_clone = Clone::Choose->can("clone"); }
+    { local @Clone::Choose::BACKENDS = (Storable => "dclone"); $st_clone = Clone::Choose->can("clone"); }
+
+Don't misinterpret _recommended_ - modifying `@Clone::Choose::BACKENDS`
+has a lot of pitfalls and is unreliable beside such small examples. Do
+not hesitate open a request with an appropriate proposal for choosing
+implementations dynamically.
+
+The use of `@Clone::Choose::BACKENDS` is discouraged and will be deprecated
+as soon as anyone provides a better idea.
 
 # AUTHOR
 
