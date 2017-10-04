@@ -19,7 +19,8 @@ BEGIN
 {
     unless ($use_m)
     {
-        eval "use Module::Runtime (); 1;" and $use_m = Module::Runtime->can("use_module");
+        eval "use Module::Runtime (); 1;"
+          and $use_m = Module::Runtime->can("use_module");
         $use_m ||= sub {
             my $pkg = shift;
             eval "use $pkg";
@@ -54,7 +55,7 @@ sub can
 sub import
 {
     my ($me, @params) = @_;
-    my $tgt = caller(1);
+    my $tgt = caller(0);
 
     my @B = @BACKENDS;
     local @BACKENDS = @B;
@@ -65,7 +66,8 @@ sub import
     {
         if ($param =~ m/^\d/)
         {
-            Carp::croak "Clone::Choose version $param required. This is only version $VERSION" if $VERSION < $param;
+            Carp::croak "Clone::Choose version $param required. This is only version $VERSION"
+              if $VERSION < $param;
         }
         elsif ($param =~ m/^:(.*)$/)
         {
@@ -80,9 +82,10 @@ sub import
             $fn or return;
 
             no strict "refs";
-            *{"$tgt\::clone"} = $fn;
+            *{"${tgt}::clone"} = $fn;
 
-            @params and Carp::croak "Parameters left after clone. Please see description.";
+            @params
+              and Carp::croak "Parameters left after clone. Please see description.";
 
             return;
         }
