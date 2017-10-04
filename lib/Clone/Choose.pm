@@ -64,12 +64,7 @@ sub import
 
     while (my $param = shift @params)
     {
-        if ($param =~ m/^\d/)
-        {
-            Carp::croak "Clone::Choose version $param required. This is only version $VERSION"
-              if $VERSION < $param;
-        }
-        elsif ($param =~ m/^:(.*)$/)
+        if ($param =~ m/^:(.*)$/)
         {
             my $favourite = $1;
             my %b         = @BACKENDS;
