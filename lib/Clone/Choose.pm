@@ -122,7 +122,7 @@ Clone::Choose - Choose appropriate clone utility
 =head1 DESCRIPTION
 
 C<Clone::Choose> checks several different modules which provides a
-C<clone()> function and selects an appropriate one. The default preferrence
+C<clone()> function and selects an appropriate one. The default preference
 is
 
   Clone
@@ -145,7 +145,7 @@ or pick a particular C<clone> implementation
   use Clone::Choose qw(:Storable clone);
 
 The exported implementation is resolved dynamically, which means that any
-using module can either rely on the default backend preferrence or choose
+using module can either rely on the default backend preference or choose
 a particular one.
 
 This also means, an already chosen import can't be modified like
