@@ -8,7 +8,7 @@ our $VERSION = "0.002";
 $VERSION = eval $VERSION;
 
 our @BACKENDS = (
-    Clone       => "clone",
+    Clone       => [0.10, "clone"],
     Storable    => "dclone",
     "Clone::PP" => "clone",
 );
@@ -20,10 +20,13 @@ BEGIN
     unless ($use_m)
     {
         eval "use Module::Runtime (); 1;"
-          and $use_m = Module::Runtime->can("use_module");
+          and $use_m = Module::Runtime->can("use_module")
+          unless $ENV{CLONE_CHOOSE_NO_MODULE_RUNTIME};
         $use_m ||= sub {
-            my $pkg = shift;
-            eval "use $pkg";
+            my ($pkg, @imports) = @_;
+            my $use_stmt = "use $pkg";
+            @imports and $use_stmt = join(" ", $use_stmt, @imports);
+            eval $use_stmt;
             $@ and die $@;
             1;
         };
@@ -41,9 +44,9 @@ sub can
     my $fn;
     while (my ($pkg, $rout) = splice @backends, 0, 2)
     {
-        eval { $use_m->($pkg); 1; } or next;
+        eval { $use_m->($pkg, ref $rout ? ($rout->[0]) : ()); 1; } or next;
 
-        $fn = $pkg->can($rout);
+        $fn = $pkg->can(ref $rout ? $rout->[1] : $rout);
         $fn or next;
 
         last;
@@ -74,7 +77,7 @@ sub import
         elsif ($param eq "clone")
         {
             my $fn = __PACKAGE__->can("clone");
-            $fn or return;
+            $fn or Carp::croak "Cannot find an apropriate clone().";
 
             no strict "refs";
             *{"${tgt}::clone"} = $fn;
