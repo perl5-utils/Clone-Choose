@@ -33,6 +33,24 @@ BEGIN
     }
 }
 
+sub backend
+{
+    my $self     = shift;
+    my @backends = @BACKENDS;
+
+    while (my ($pkg, $rout) = splice @backends, 0, 2)
+    {
+        eval { $use_m->($pkg, ref $rout ? ($rout->[0]) : ()); 1; } or next;
+
+        my $fn = $pkg->can(ref $rout ? $rout->[1] : $rout);
+        $fn or next;
+
+        return $pkg;
+    }
+
+    return;
+}
+
 sub can
 {
     my $self     = shift;
@@ -167,6 +185,17 @@ implementations dynamically.
 
 The use of C<@Clone::Choose::BACKENDS> is discouraged and will be deprecated
 as soon as anyone provides a better idea.
+
+=head1 PACKAGE METHODS
+
+=head2 backend
+
+C<backend> tells the caller about the dynamic chosen backend:
+
+  use Clone::Choose;
+  say Clone::Choose->backend; # Clone
+
+This method currently exists for debug purposes only.
 
 =head1 AUTHOR
 
