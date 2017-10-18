@@ -59,6 +59,14 @@ sub can
 
     return __PACKAGE__->SUPER::can($name) unless $name eq "clone";
 
+    if ($ENV{CLONE_CHOOSE_PREFERRED_BACKEND})
+    {
+        my $favourite = $ENV{CLONE_CHOOSE_PREFERRED_BACKEND};
+        my %b         = @backends;
+        Carp::croak "$favourite not found" unless $b{$favourite};
+        @backends = ($favourite => $b{$favourite});
+    }
+
     my $fn;
     while (my ($pkg, $rout) = splice @backends, 0, 2)
     {
@@ -88,7 +96,12 @@ sub import
         if ($param =~ m/^:(.*)$/)
         {
             my $favourite = $1;
-            my %b         = @BACKENDS;
+            $ENV{CLONE_CHOOSE_PREFERRED_BACKEND}
+              and $ENV{CLONE_CHOOSE_PREFERRED_BACKEND} ne $favourite
+              and Carp::croak
+              "Environment CLONE_CHOOSE_PREFERRED_BACKEND($ENV{CLONE_CHOOSE_PREFERRED_BACKEND}) not equal to imported ($favourite)";
+
+            my %b = @BACKENDS;
             Carp::croak "$favourite not found" unless $b{$favourite};
             @BACKENDS = ($favourite => $b{$favourite});
         }
