@@ -17,3 +17,6 @@ pm_to_blib
 *.swp
 MANIFEST
 Clone-Choose-*
+t/Clone/
+t/Storable/
+t/ClonePP/
