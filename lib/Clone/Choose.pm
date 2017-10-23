@@ -125,6 +125,13 @@ sub import
     }
 }
 
+sub get_backends
+{
+    my $self     = shift;
+    my %backends = @BACKENDS;
+    return keys %backends;
+}
+
 1;
 
 __END__
@@ -209,6 +216,10 @@ C<backend> tells the caller about the dynamic chosen backend:
   say Clone::Choose->backend; # Clone
 
 This method currently exists for debug purposes only.
+
+=head2 get_backends
+
+C<get_backends> returns a list of the currently supported backends.
 
 =head1 AUTHOR
 
