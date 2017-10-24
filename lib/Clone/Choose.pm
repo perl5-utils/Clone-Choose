@@ -186,6 +186,9 @@ The exported implementation is resolved dynamically, which means that any
 using module can either rely on the default backend preference or choose
 a particular one.
 
+It is also possible to select a particular C<clone> backend by setting the
+environment variable CLONE_CHOOSE_PREFERRED_BACKEND to your preferred backend.
+
 This also means, an already chosen import can't be modified like
 
   use Clone::Choose qw(clone :Storable);
