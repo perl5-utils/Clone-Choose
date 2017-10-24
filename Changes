@@ -1,5 +1,12 @@
 Revision history for Clone-Choose
 
+0.004   2017-10-24
+    - Added get_backends() function which returns a list of currently
+      supported backends.
+    - Extended testing for the different clone() providing backends.
+    - Introduce environment variable CLONE_CHOOSE_PREFERRED_BACKEND to let
+      you preselect your favourite backend.
+
 0.003	2017-10-16
     - Introduce a backend() debug helper to help identifying issues depending
       on underlying
