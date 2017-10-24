@@ -91,6 +91,7 @@ WriteMakefile1(
     BUILD_REQUIRES     => \%BUILD_DEPS,
     TEST_REQUIRES      => \%TEST_DEPS,
     test               => {TESTS => join(' ', 't/*.t', 't/Clone/*.t', 't/Storable/*.t', 't/ClonePP/*.t', 'xt/*.t')},
+    (-d "Sandbox" ? (realclean => {FILES => "t/Clone t/Storable t/ClonePP M*.bak"}) : ()),
 );
 
 sub WriteMakefile1
