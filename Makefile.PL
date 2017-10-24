@@ -5,7 +5,7 @@ use 5.008001;
 
 use ExtUtils::MakeMaker;
 
-my %RUN_DEPS = ();
+my %RUN_DEPS = ($] < 5.007003 ? ('Clone::PP' => 0) : ('Storable' => 0));
 
 my %CONFIGURE_DEPS = (
     'ExtUtils::MakeMaker' => 0,
@@ -34,9 +34,10 @@ if (-d 'Sandbox')
 
 WriteMakefile1(
     MIN_PERL_VERSION => '5.008001',
-    META_ADD         => {
-        'meta-spec' => {version => 2},
-        resources   => {
+    META_MERGE       => {
+        'meta-spec'    => {version => 2},
+        dynamic_config => 1,
+        resources      => {
             homepage   => 'https://metacpan.org/release/Clone-Choose',
             repository => {
                 url  => 'https://github.com:perl5-utils/Clone-Choose.git',
@@ -68,8 +69,15 @@ WriteMakefile1(
             configure => {
                 requires => {%CONFIGURE_DEPS},
             },
-            build   => {requires => {%BUILD_DEPS}},
-            test    => {requires => {%TEST_DEPS}},
+            build => {requires => {%BUILD_DEPS}},
+            test  => {
+                requires => {%TEST_DEPS},
+                suggests => {
+                    'Clone'     => 0.10,
+                    'Clone::PP' => 0,
+                    'Storable'  => 0
+                }
+            },
             runtime => {
                 requires => {
                     %RUN_DEPS,
