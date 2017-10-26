@@ -1,5 +1,9 @@
 Revision history for Clone-Choose
 
+0.006   2017-10-26
+    - Use inline test templates to ńot fail if . is not in @INC.
+    - Do more tests with the different backends.
+
 0.005	2017-10-24
     - avoid distributing Sandbox - fixes GH issue#2 reported by Slaven Rezić
 
