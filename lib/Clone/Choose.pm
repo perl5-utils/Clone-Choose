@@ -38,6 +38,14 @@ sub backend
     my $self     = shift;
     my @backends = @BACKENDS;
 
+    if ($ENV{CLONE_CHOOSE_PREFERRED_BACKEND})
+    {
+        my $favourite = $ENV{CLONE_CHOOSE_PREFERRED_BACKEND};
+        my %b         = @backends;
+        Carp::croak "$favourite not found" unless $b{$favourite};
+        @backends = ($favourite => $b{$favourite});
+    }
+
     while (my ($pkg, $rout) = splice @backends, 0, 2)
     {
         eval { $use_m->($pkg, ref $rout ? ($rout->[0]) : ()); 1; } or next;
@@ -129,6 +137,14 @@ sub get_backends
 {
     my $self     = shift;
     my %backends = @BACKENDS;
+
+    if ($ENV{CLONE_CHOOSE_PREFERRED_BACKEND})
+    {
+        my $favourite = $ENV{CLONE_CHOOSE_PREFERRED_BACKEND};
+        Carp::croak "$favourite not found" unless $backends{$favourite};
+        %backends = ($favourite => $backends{$favourite});
+    }
+
     return keys %backends;
 }
 

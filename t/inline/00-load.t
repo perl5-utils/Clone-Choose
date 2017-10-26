@@ -1,11 +1,10 @@
-#!perl
-
-use strict;
-use warnings;
 use Test::More;
 
 BEGIN
 {
+    $ENV{CLONE_CHOOSE_PREFERRED_BACKEND} and eval "use $ENV{CLONE_CHOOSE_PREFERRED_BACKEND}; 1;";
+    $@ and plan skip_all => "No $ENV{CLONE_CHOOSE_PREFERRED_BACKEND} found.";
+
     use_ok('Clone::Choose') || BAIL_OUT "Couldn't load Clone::Choose";
 }
 
