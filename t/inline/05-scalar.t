@@ -1,7 +1,3 @@
-#!perl
-
-use strict;
-use warnings;
 use Scalar::Util qw(refaddr);
 use Test::More;
 

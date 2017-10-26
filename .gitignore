@@ -20,3 +20,4 @@ Clone-Choose-*
 t/Clone/
 t/Storable/
 t/ClonePP/
+t/Auto/

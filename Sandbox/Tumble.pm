@@ -21,11 +21,10 @@ sub tumble
     $test_writer->allow_file_overwrite(1);
 
     $test_writer->write_test_variants(
-        input_tests => {
-            "05-scalar" => {require => "t/05-scalar.t"},
-            "06-array"  => {require => "t/06-array.t"},
-            "07-hash"   => {require => "t/07-hash.t"},
-        },
+        input_tests => $test_writer->find_input_inline_tests(
+            search_patterns => ["*.t"],
+            search_dirs     => ["t/inline"],
+        ),
         variant_providers => ["CC::TestVariants"],
         output_dir        => $output_dir,
     );
@@ -43,6 +42,7 @@ sub provider
     my $warnings = $context->new_module_use(warnings => ['all']);
 
     # statically generate both at dist authoring stage and decide about tests to run at configure stage
+    $variants->{Auto} = $context->new($warnings, $strict,);
     $variants->{Clone} = $context->new(
         $context->new_env_var(
             CLONE_CHOOSE_PREFERRED_BACKEND => "Clone",
