@@ -2,6 +2,12 @@ use Test::More;
 
 use Clone::Choose;
 
+BEGIN
+{
+    $ENV{CLONE_CHOOSE_PREFERRED_BACKEND} and eval "use $ENV{CLONE_CHOOSE_PREFERRED_BACKEND}; 1;";
+    $@ and plan skip_all => "No $ENV{CLONE_CHOOSE_PREFERRED_BACKEND} found.";
+}
+
 my %src = (
     simple => "yeah",
     ary    => [qw(foo bar)],
