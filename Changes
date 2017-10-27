@@ -1,5 +1,9 @@
 Revision history for Clone-Choose
 
+0.008   2017-10-27
+    - Prove whether all prerequisites are available for a particular
+      backend before the test starts.
+
 0.007   2017-10-27
     - Fix simple test to not fail if preselected backend is not found.
 
