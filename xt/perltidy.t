@@ -8,5 +8,5 @@ use Test::PerlTidy;
 
 run_tests(
     perltidyrc => '.perltidyrc',
-    exclude    => ['t/Clone/', 't/Storable/', 't/ClonePP/'],
+    exclude    => ['t/Auto/', 't/Clone/', 't/Storable/', 't/ClonePP/', 't/inline/'],
 );
