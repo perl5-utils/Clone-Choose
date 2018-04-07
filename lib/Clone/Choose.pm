@@ -4,7 +4,7 @@ use strict;
 use warnings;
 use Carp ();
 
-our $VERSION = "0.008";
+our $VERSION = "0.009";
 $VERSION = eval $VERSION;
 
 our @BACKENDS = (
