@@ -55,8 +55,6 @@ sub backend
 
         return $pkg;
     }
-
-    return;
 }
 
 sub can
