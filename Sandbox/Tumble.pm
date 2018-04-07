@@ -25,12 +25,12 @@ sub tumble
             search_patterns => ["*.t"],
             search_dirs     => ["t/inline"],
         ),
-        variant_providers => ["CC::TestVariants"],
+        variant_providers => ["CC::Clones", "CC::MR"],
         output_dir        => $output_dir,
     );
 }
 
-package CC::TestVariants::Clones;
+package CC::Clones::TestVariants;
 
 use strict;
 use warnings;
@@ -41,8 +41,8 @@ sub provider
     my $strict   = $context->new_module_use(strict   => [qw(subs vars refs)]);
     my $warnings = $context->new_module_use(warnings => ['all']);
 
-    # statically generate both at dist authoring stage and decide about tests to run at configure stage
-    $variants->{Auto} = $context->new($warnings, $strict,);
+    $variants->{Auto} = $context->new($warnings, $strict);
+
     $variants->{Clone} = $context->new(
         $context->new_env_var(
             CLONE_CHOOSE_PREFERRED_BACKEND => "Clone",
@@ -64,6 +64,21 @@ sub provider
         $warnings,
         $strict,
     );
+}
+
+package CC::MR::TestVariants;
+
+use strict;
+use warnings;
+
+sub provider
+{
+    my ($self, $path, $context, $tests, $variants) = @_;
+
+    $variants->{NoMR} = $context->new_module_use(
+        "Test::Without::Module" => [qw(Module::Runtime)],
+    );
+    $variants->{MR} = $context->new();
 }
 
 1;

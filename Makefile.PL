@@ -13,7 +13,8 @@ my %CONFIGURE_DEPS = (
 my %BUILD_DEPS = ();
 
 my %TEST_DEPS = (
-    'Test::More' => 0.90,
+    'Test::More'            => 0.90,
+    'Test::Without::Module' => 0,
 );
 
 if (-d 'Sandbox')
@@ -99,7 +100,7 @@ WriteMakefile1(
     PREREQ_PM          => \%RUN_DEPS,
     BUILD_REQUIRES     => \%BUILD_DEPS,
     TEST_REQUIRES      => \%TEST_DEPS,
-    test               => {TESTS => join(' ', 't/Auto/*.t', 't/*.t', 't/Clone/*.t', 't/Storable/*.t', 't/ClonePP/*.t', 'xt/*.t')},
+    test => {TESTS => join(' ', 't/Auto/*/*.t', 't/*.t', 't/Clone/*/*.t', 't/Storable/*/*.t', 't/ClonePP/*/*.t', 'xt/*.t')},
     (-d "Sandbox" ? (realclean => {FILES => join(' ', 't/Auto/', 't/Clone', 't/Storable', 't/ClonePP', 'M*.bak')}) : ()),
 );
 
