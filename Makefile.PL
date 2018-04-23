@@ -42,7 +42,7 @@ WriteMakefile1(
         resources      => {
             homepage   => 'https://metacpan.org/release/Clone-Choose',
             repository => {
-                url  => 'https://github.com:perl5-utils/Clone-Choose.git',
+                url  => 'https://github.com/perl5-utils/Clone-Choose.git',
                 web  => 'https://github.com/perl5-utils/Clone-Choose',
                 type => 'git',
             },
