@@ -8,6 +8,10 @@ BEGIN
     use_ok('Clone::Choose') || BAIL_OUT "Couldn't load Clone::Choose";
 }
 
+$ENV{CLONE_CHOOSE_PREFERRED_BACKEND}
+  and ok(eval { Clone::Choose->import(":$ENV{CLONE_CHOOSE_PREFERRED_BACKEND}", "clone"); 1; },
+    "ENV{CLONE_CHOOSE_PREFERRED_BACKEND} equals favourite");
+
 diag("Testing Clone::Choose $Clone::Choose::VERSION, Perl $], $^X");
 
 my $backend = Clone::Choose->backend;
