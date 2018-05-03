@@ -19,6 +19,7 @@ BEGIN
 {
     unless ($use_m)
     {
+        # TODO Bug report for Devel::Cover
         eval "use Module::Runtime (); 1;"
           and $use_m = Module::Runtime->can("use_module")
           unless $ENV{CLONE_CHOOSE_NO_MODULE_RUNTIME};
