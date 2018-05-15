@@ -13,26 +13,27 @@ our @BACKENDS = (
     "Clone::PP" => "clone",
 );
 
-my $use_m;
-
-BEGIN
+sub _guess_use_module
 {
-    unless ($use_m)
-    {
-        # TODO Bug report for Devel::Cover
-        eval "use Module::Runtime (); 1;"
-          and $use_m = Module::Runtime->can("use_module")
-          unless $ENV{CLONE_CHOOSE_NO_MODULE_RUNTIME};
-        $use_m ||= sub {
-            my ($pkg, @imports) = @_;
-            my $use_stmt = "use $pkg";
-            @imports and $use_stmt = join(" ", $use_stmt, @imports);
-            eval $use_stmt;
-            $@ and die $@;
-            1;
-        };
-    }
+    my $um;
+    # TODO Bug report for Devel::Cover
+    eval "use Module::Runtime (); 1;"
+      and $um = Module::Runtime->can("use_module")
+      unless $ENV{CLONE_CHOOSE_NO_MODULE_RUNTIME};
+    $um ||= sub {
+        my ($pkg, @imports) = @_;
+        my $use_stmt = "use $pkg";
+        @imports and $use_stmt = join(" ", $use_stmt, @imports);
+        eval $use_stmt;
+        $@ and die $@;
+        1;
+    };
+
+    return $um;
 }
+
+## no critic (Variables::ProhibitAugmentedAssignmentInDeclaration)
+my $use_m ||= _guess_use_module;
 
 sub backend
 {
