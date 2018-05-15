@@ -47,4 +47,16 @@ SCOPE:
     like($e, qr/no_clone is not exportable by Clone::Choose/, "Unknown function imported");
 }
 
+SCOPE:
+{
+    use FindBin qw($Bin);
+    local @INC;
+    push @INC, "$Bin/lib";
+    local @Clone::Choose::BACKENDS = ("Module_With_Wrong_Name" => "clone");
+    eval { use_module("Clone::Choose")->import(":Module_With_Wrong_Name", "clone") };
+    my $e = $@;
+    like($e, qr/Cannot find an apropriate clone/, "Cannot load Module_With_Wrong_Name");
+    ok(!Clone::Choose->backend());
+}
+
 done_testing;

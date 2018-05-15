@@ -19,4 +19,15 @@ SCOPE:
     like($e, qr/\QCannot find an apropriate clone().\E/, "Loading unloadable package fails correctly.");
 }
 
+SCOPE:
+{
+    use FindBin qw($Bin);
+    local @INC;
+    push @INC, "$Bin/lib";
+    local @Clone::Choose::BACKENDS = ("Module_With_Wrong_Name" => "clone");
+    eval { Clone::Choose->import(":Module_With_Wrong_Name", "clone"); };
+    my $e = $@;
+    like($e, qr/Cannot find an apropriate clone/, "Cannot load Module_With_Wrong_Name");
+}
+
 done_testing;
