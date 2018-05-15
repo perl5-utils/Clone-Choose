@@ -247,6 +247,18 @@ This method currently exists for debug purposes only.
 
 C<get_backends> returns a list of the currently supported backends.
 
+=head2 can
+
+  Clone::Choose->can("clone");
+
+C<can> tells whether the dynamic chosen backend I<can> or I<can't>
+the desired clone function.
+
+  Clone::Choose->can("VERSION");
+
+Returns what C<UNIVERSAL::can> thinks whether C<Clone::Choose> can
+the desired function.
+
 =head1 AUTHOR
 
   Jens Rehsack <rehsack at cpan dot org>
